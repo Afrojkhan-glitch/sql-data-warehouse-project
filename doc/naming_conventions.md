@@ -12,7 +12,6 @@ This document outlines the naming conventions used for schemas, tables, views, c
 - [Column Naming Conventions](#column-naming-conventions)
   - [Surrogate Keys](#surrogate-keys)
   - [Technical Columns](#technical-columns)
-- [Stored Procedure](#stored-procedure)
 
 ---
 
