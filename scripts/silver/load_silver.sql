@@ -15,7 +15,7 @@ Parameters:
   
 */
 SELECT'----------------------------------------------------------------';
-SELECT 'ERP Table';
+SELECT 'CRM Table';
 SELECT'----------------------------------------------------------------';
 
 
@@ -155,18 +155,17 @@ FROM bronze.erp_cust_az12;
 SELECT 'Truncating Table silver.erp_loc_a101 ';
 TRUNCATE TABLE silver.erp_loc_a101;
 SELECT 'Inserting Data into: silver_erp_loc_a101';
-INSERT INTO silver.erp_loc_a101(
-cid,
-cntry)
+INSERT INTO silver.erp_loc_a101 (cid, cntry)
 SELECT 
-REPLACE(cid,'-','') AS cid,
-CASE 
-	WHEN TRIM(cntry) = 'DE' THEN 'Germany'
-    WHEN TRIM(cntry) IN ('US','USA') THEN 'United States'
-    WHEN TRIM(cntry)='' OR TRIM(cntry) IS NULL THEN 'n/a'
-    ELSE TRIM(cntry)
+    REPLACE(cid, '-', '') AS cid,
+    CASE 
+        WHEN UPPER(TRIM(REPLACE(REPLACE(cntry, '\r', ''), '\n', ''))) = 'DE' THEN 'Germany'
+        WHEN UPPER(TRIM(REPLACE(REPLACE(cntry, '\r', ''), '\n', ''))) IN ('US', 'USA') THEN 'United States'
+        WHEN TRIM(cntry) = '' OR cntry IS NULL THEN 'n/a'
+        ELSE TRIM(REPLACE(REPLACE(cntry, '\r', ''), '\n', ''))
     END AS cntry
-FROM  bronze.erp_loc_a101;
+FROM bronze.erp_loc_a101;
+
 
 SELECT 'Truncating Table silver.erp_px_cat_g1v2 ';
 TRUNCATE TABLE silver.erp_px_cat_g1v2;
