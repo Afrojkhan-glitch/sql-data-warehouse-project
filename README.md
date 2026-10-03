@@ -36,4 +36,4 @@ These insights empower stakeholder with key business metrics, enabling strategic
 This project is licensed under the [MIT LICENSED](LICENSE). You are free to use, modify, and share this project with proper with proper attribution.
 
 ## About Me
-Hi there! My name is **Afroj Ahmad Khan**
+Hi there! My name is **Afroj Ahmad Khan**.
