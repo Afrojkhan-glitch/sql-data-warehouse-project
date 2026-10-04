@@ -11,7 +11,7 @@ SET GLOBAL local_infile = 1;
 -- Source: /datasets/source_crm/cust_info.csv
 -- ----------------------------------------------------------------------------
 LOAD DATA LOCAL INFILE '/Users/afrojkhan/Desktop/sql-data-warehouse-project/datasets/source_crm/cust_info.csv'
-INTO TABLE bronze_crm_cust_info
+INTO TABLE bronze.crm_cust_info
 CHARACTER SET utf8mb4                    -- Prevents encoding errors with special characters
 FIELDS TERMINATED BY ','                 -- Specifies comma as column delimiter
 ENCLOSED BY '"'                          -- Removes surrounding quotes from text values
@@ -24,7 +24,7 @@ IGNORE 1 LINES;                          -- Skips header row in CSV file
 -- Source: /datasets/source_crm/prd_info.csv
 -- ----------------------------------------------------------------------------
 LOAD DATA LOCAL INFILE '/Users/afrojkhan/Desktop/sql-data-warehouse-project/datasets/source_crm/prd_info.csv'
-INTO TABLE bronze_crm_prd_info
+INTO TABLE bronze.crm_prd_info
 CHARACTER SET utf8mb4
 FIELDS TERMINATED BY ','
 ENCLOSED BY '"'
@@ -37,7 +37,7 @@ IGNORE 1 LINES;
 -- Source: /datasets/source_crm/sales_details.csv
 -- ----------------------------------------------------------------------------
 LOAD DATA LOCAL INFILE '/Users/afrojkhan/Desktop/sql-data-warehouse-project/datasets/source_crm/sales_details.csv'
-INTO TABLE bronze_crm_sales_details
+INTO TABLE bronze.crm_sales_details
 CHARACTER SET utf8mb4
 FIELDS TERMINATED BY ','
 ENCLOSED BY '"'
@@ -50,7 +50,7 @@ IGNORE 1 LINES;
 -- Source: /datasets/source_erp/CUST_AZ12.csv
 -- ----------------------------------------------------------------------------
 LOAD DATA LOCAL INFILE '/Users/afrojkhan/Desktop/sql-data-warehouse-project/datasets/source_erp/CUST_AZ12.csv'
-INTO TABLE bronze_erp_cust_az12
+INTO TABLE bronze.erp_cust_az12
 CHARACTER SET utf8mb4
 FIELDS TERMINATED BY ','
 ENCLOSED BY '"'
@@ -63,7 +63,7 @@ IGNORE 1 LINES;
 -- Source: /datasets/source_erp/LOC_A101.csv
 -- ----------------------------------------------------------------------------
 LOAD DATA LOCAL INFILE '/Users/afrojkhan/Desktop/sql-data-warehouse-project/datasets/source_erp/LOC_A101.csv'
-INTO TABLE bronze_erp_loc_a101
+INTO TABLE bronze_erp.loc_a101
 CHARACTER SET utf8mb4
 FIELDS TERMINATED BY ','
 ENCLOSED BY '"'
@@ -76,7 +76,7 @@ IGNORE 1 LINES;
 -- Source: /datasets/source_erp/PX_CAT_G1V2.csv
 -- ----------------------------------------------------------------------------
 LOAD DATA LOCAL INFILE '/Users/afrojkhan/Desktop/sql-data-warehouse-project/datasets/source_erp/PX_CAT_G1V2.csv'
-INTO TABLE bronze_erp_px_cat_g1v2
+INTO TABLE bronze.erp_px_cat_g1v2
 CHARACTER SET utf8mb4
 FIELDS TERMINATED BY ','
 ENCLOSED BY '"'
