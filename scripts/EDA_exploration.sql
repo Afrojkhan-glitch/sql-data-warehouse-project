@@ -255,40 +255,74 @@ FROM product_performance
 ORDER BY product_name, order_year;
 
 --Which categories contribute the most to overall sales
-with category_sales as(
-select 
+WITH category_sales AS(
+SELECT
 category,
-sum(sales_amount) as total_sales
-from gold.fact_sales f
-left join gold.dim_products p on
+sum(sales_amount) AS total_sales
+FROM gold.fact_sales f
+LEFT JOIN gold.dim_products p ON
 f.product_key = p.product_key
-group by category)
-select 
+GROUP BY category)
+SELECT
 category,
 total_sales,
-sum(total_sales) over() as overall_sales,
-concat(round((total_sales/sum(total_sales) over())*100,2),'%') as percentage_of_total
-from category_sales
-order by total_sales desc;
+sum(total_sales) over() AS overall_sales,
+concat(round((total_sales/sum(total_sales) over())*100,2),'%') AS percentage_of_total
+FROM category_sales
+ORDER BY total_sales DESC;
 
 
 --Segment products into cost ranges and count how many products fall into eact segment
-with product_segments as(
-select 
+WITH product_segments AS(
+SELECT
 product_key,
 product_name,
 cost,
-case 
-	when cost<100 then 'Below 100'
-    when cost between 100 and 500 then '100-500'
-    when cost between 500 and 1000 then '500-1000'
-    else 'Above 1000'
-end as cost_range
-from gold.dim_products)
+CASE
+	WHEN cost<100 THEN 'Below 100'
+    WHEN cost BETWEEN 100 AND 500 THEN '100-500'
+    WHEN cost BETWEEN 500 AND 1000 THEN '500-1000'
+    ELSE 'Above 1000'
+END AS cost_range
+FROM gold.dim_products)
 
-select 
+SELECT
 cost_range,
-count(product_key) as total_products
-from product_segments
-group by cost_range
-order by total_products desc;
+COUNT(product_key) AS total_products
+FROM product_segments
+GROUP BY cost_range
+ORDER BY total_products DESC;
+
+'''
+Group customers into three segements based on their spending behaviour:
+	-VIP: Customers with at least 12 months of history and spending more than 5000.
+    -Regular: Customer with at least 12 months of history but spending 5000 or less.
+    -New: Customers with a lifespan less than 12 months.
+And find the total number of customers by each group
+'''
+WITH customer_spending AS (
+SELECT
+c.customer_key,
+sum(f.sales_amount) AS total_spending,
+min(order_date) AS first_order,
+max(order_date) AS last_order,
+TIMESTAMPDIFF(MONTH, MIN(order_date), MAX(order_date)) AS lifespan
+FROM gold.fact_sales f 
+LEFT JOIN gold.dim_customers c ON
+f.customer_key = c.customer_key
+GROUP BY c.customer_key)
+
+SELECT
+customer_segment,
+COUNT(customer_key) AS total_customer
+FROM(
+	SELECT
+	customer_key,
+	CASE 
+		WHEN lifespan >=12 AND total_spending > 5000 THEN 'VIP'
+		WHEN lifespan >=12 AND total_spending <=5000 THEN 'Regular'
+		ELSE 'New'
+	END AS customer_segment
+	FROM customer_spending
+	ORDER BY customer_key)t
+GROUP BY customer_segment;
