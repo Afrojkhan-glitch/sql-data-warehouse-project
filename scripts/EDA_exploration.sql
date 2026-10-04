@@ -144,10 +144,10 @@ GROUP BY c.customer_key, c.first_name, c.last_name
 ORDER BY total_orders ASC
 LIMIT 3;
 
--- -----------------------------------------------------------------------------
+
 -- 6. MONTHLY AGGREGATION & VOLUME METRICS
 -- Purpose: Breakdown revenue, order volume, unique customers, and items sold by month.
--- -----------------------------------------------------------------------------
+
 SELECT 
     YEAR(order_date) AS order_year,
     MONTH(order_date) AS order_month,
@@ -160,11 +160,11 @@ GROUP BY YEAR(order_date), MONTH(order_date)
 ORDER BY order_year, order_month;
 
 
--- -----------------------------------------------------------------------------
+
 -- 7. MONTHLY RUNNING TOTAL & MOVING AVERAGE ANALYSIS
 -- Purpose: Calculate cumulative sales over time and track a 3-month rolling 
---          average price using Window Functions and a Common Table Expression (CTE).
--- -----------------------------------------------------------------------------
+-- average price using Window Functions and a Common Table Expression (CTE).
+
 WITH monthly_metrics AS (
     SELECT
         DATE_FORMAT(order_date, '%Y_%m') AS order_month,
@@ -186,10 +186,10 @@ FROM monthly_metrics
 ORDER BY month_start_date;
 
 
--- -----------------------------------------------------------------------------
+
 -- 6. YEARLY RUNNING TOTAL & ANNUAL MOVING AVERAGE ANALYSIS
 -- Purpose: Evaluate year-over-year growth and cumulative sales trajectory.
--- -----------------------------------------------------------------------------
+
 WITH yearly_metrics AS (
     SELECT
         YEAR(order_date) AS order_year,
@@ -207,3 +207,49 @@ SELECT
     AVG(avg_price) OVER(ORDER BY order_year) AS running_avg_price
 FROM yearly_metrics
 ORDER BY order_year;
+
+
+--Analyze the yearly performance of products by comparing their sales to both the
+--average sales performance of the product and the previous year's sales
+
+WITH yearly_product_sales AS (
+    SELECT 
+        YEAR(f.order_date) AS order_year,
+        p.product_name,
+        SUM(f.sales_amount) AS current_sales
+    FROM gold.fact_sales f
+    LEFT JOIN gold.dim_products p 
+        ON f.product_key = p.product_key
+    WHERE f.order_date IS NOT NULL
+    GROUP BY YEAR(f.order_date), p.product_name
+),
+product_performance AS (
+    SELECT 
+        order_year,
+        product_name,
+        current_sales,
+        AVG(current_sales) OVER (PARTITION BY product_name) AS avg_sales,
+        LAG(current_sales) OVER (PARTITION BY product_name ORDER BY order_year) AS py_sales
+    FROM yearly_product_sales
+)
+SELECT 
+    order_year,
+    product_name,
+    current_sales,
+    avg_sales,
+    current_sales - avg_sales AS diff_avg,
+    CASE 
+        WHEN current_sales - avg_sales > 0 THEN 'Above_Avg'
+        WHEN current_sales - avg_sales < 0 THEN 'Below_Avg'
+        ELSE 'Avg'
+    END AS avg_change,
+    py_sales,
+    current_sales - py_sales AS diff_py,
+    CASE 
+        WHEN current_sales - py_sales > 0 THEN 'Increase'
+        WHEN current_sales - py_sales < 0 THEN 'Decrease'
+        WHEN py_sales IS NULL THEN 'New Product'
+        ELSE 'No Change'
+    END AS py_change
+FROM product_performance
+ORDER BY product_name, order_year;
