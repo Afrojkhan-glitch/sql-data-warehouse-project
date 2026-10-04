@@ -63,7 +63,7 @@ IGNORE 1 LINES;
 -- Source: /datasets/source_erp/LOC_A101.csv
 -- ----------------------------------------------------------------------------
 LOAD DATA LOCAL INFILE '/Users/afrojkhan/Desktop/sql-data-warehouse-project/datasets/source_erp/LOC_A101.csv'
-INTO TABLE bronze_erp.loc_a101
+INTO TABLE bronze.erp.loc_a101
 CHARACTER SET utf8mb4
 FIELDS TERMINATED BY ','
 ENCLOSED BY '"'
