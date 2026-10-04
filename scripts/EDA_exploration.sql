@@ -143,3 +143,67 @@ LEFT JOIN gold.dim_customers c ON f.customer_key = c.customer_key
 GROUP BY c.customer_key, c.first_name, c.last_name
 ORDER BY total_orders ASC
 LIMIT 3;
+
+-- -----------------------------------------------------------------------------
+-- 6. MONTHLY AGGREGATION & VOLUME METRICS
+-- Purpose: Breakdown revenue, order volume, unique customers, and items sold by month.
+-- -----------------------------------------------------------------------------
+SELECT 
+    YEAR(order_date) AS order_year,
+    MONTH(order_date) AS order_month,
+    SUM(sales_amount) AS total_sales,
+    COUNT(DISTINCT customer_key) AS total_customers,
+    SUM(quantity) AS total_quantity
+FROM gold.fact_sales
+WHERE order_date IS NOT NULL
+GROUP BY YEAR(order_date), MONTH(order_date)
+ORDER BY order_year, order_month;
+
+
+-- -----------------------------------------------------------------------------
+-- 7. MONTHLY RUNNING TOTAL & MOVING AVERAGE ANALYSIS
+-- Purpose: Calculate cumulative sales over time and track a 3-month rolling 
+--          average price using Window Functions and a Common Table Expression (CTE).
+-- -----------------------------------------------------------------------------
+WITH monthly_metrics AS (
+    SELECT
+        DATE_FORMAT(order_date, '%Y_%m') AS order_month,
+        MIN(order_date) AS month_start_date,
+        SUM(sales_amount) AS total_sales,
+        AVG(price) AS avg_price
+    FROM gold.fact_sales
+    WHERE order_date IS NOT NULL
+    GROUP BY DATE_FORMAT(order_date, '%Y_%m')
+)
+SELECT 
+    order_month,
+    total_sales,
+    SUM(total_sales) OVER(ORDER BY month_start_date) AS running_total_sales,
+    avg_price,
+    AVG(avg_price) OVER(ORDER BY month_start_date) AS running_avg_price,
+    AVG(avg_price) OVER(ORDER BY month_start_date ROWS BETWEEN 2 PRECEDING AND CURRENT ROW) AS rolling_3m_avg_price
+FROM monthly_metrics
+ORDER BY month_start_date;
+
+
+-- -----------------------------------------------------------------------------
+-- 6. YEARLY RUNNING TOTAL & ANNUAL MOVING AVERAGE ANALYSIS
+-- Purpose: Evaluate year-over-year growth and cumulative sales trajectory.
+-- -----------------------------------------------------------------------------
+WITH yearly_metrics AS (
+    SELECT
+        YEAR(order_date) AS order_year,
+        SUM(sales_amount) AS total_sales,
+        AVG(price) AS avg_price
+    FROM gold.fact_sales
+    WHERE order_date IS NOT NULL
+    GROUP BY YEAR(order_date)
+)
+SELECT 
+    order_year,
+    total_sales,
+    SUM(total_sales) OVER(ORDER BY order_year) AS running_total_sales,
+    avg_price,
+    AVG(avg_price) OVER(ORDER BY order_year) AS running_avg_price
+FROM yearly_metrics
+ORDER BY order_year;
