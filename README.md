@@ -33,7 +33,6 @@ Develop advanced SQL queries, window functions, and views to deliver granular bu
 These analytical outputs empower stakeholders with key performance indicators (KPIs) to drive strategic business decisions.
 
 ---
-
 ## Repository Structure
 
 ```text
@@ -41,10 +40,12 @@ These analytical outputs empower stakeholders with key performance indicators (K
 ├── scripts/
 │   ├── 01_bronze_layer.sql    # Raw data ingestion and table creation
 │   ├── 02_silver_layer.sql    # Data cleansing, standardization, and quality checks
-│   ├── 03_gold_layer.sql      # Star Schema dimension/fact tables & analytical views
-│   └── 04_eda_exploration.sql # Exploratory Data Analysis & business metrics queries
+│   ├── 03_gold_layer.sql      # Star Schema dimension (dim_) and fact (fact_) tables
+│   ├── 04_gold_reports.sql    # Aggregated reporting views (report_customers, report_products)
+│   └── 05_eda_exploration.sql # Exploratory Data Analysis & business metrics queries
 └── README.md                  # Project documentation
 ```
+
 ## License
 This project is licensed under the [MIT LICENSED](LICENSE). You are free to use, modify, and share this project with proper with proper attribution.
 
