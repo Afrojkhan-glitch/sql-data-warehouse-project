@@ -293,13 +293,12 @@ FROM product_segments
 GROUP BY cost_range
 ORDER BY total_products DESC;
 
-'''
-Group customers into three segements based on their spending behaviour:
+
+/*Group customers into three segements based on their spending behaviour:
 	-VIP: Customers with at least 12 months of history and spending more than 5000.
     -Regular: Customer with at least 12 months of history but spending 5000 or less.
     -New: Customers with a lifespan less than 12 months.
-And find the total number of customers by each group
-'''
+And find the total number of customers by each group.*/
 WITH customer_spending AS (
 SELECT
 c.customer_key,
