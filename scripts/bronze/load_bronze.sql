@@ -12,11 +12,11 @@ SET GLOBAL local_infile = 1;
 -- ----------------------------------------------------------------------------
 LOAD DATA LOCAL INFILE '/Users/afrojkhan/Desktop/sql-data-warehouse-project/datasets/source_crm/cust_info.csv'
 INTO TABLE bronze.crm_cust_info
-CHARACTER SET utf8mb4                    -- Prevents encoding errors with special characters
-FIELDS TERMINATED BY ','                 -- Specifies comma as column delimiter
-ENCLOSED BY '"'                          -- Removes surrounding quotes from text values
-LINES TERMINATED BY '\n'                 -- Standard line break character
-IGNORE 1 LINES;                          -- Skips header row in CSV file
+CHARACTER SET utf8mb4                  
+FIELDS TERMINATED BY ','           
+ENCLOSED BY '"'                        
+LINES TERMINATED BY '\n'                 
+IGNORE 1 LINES;                         
 
 
 -- ----------------------------------------------------------------------------
