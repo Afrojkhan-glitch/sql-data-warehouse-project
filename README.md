@@ -1,53 +1,80 @@
 # Data Warehouse and Analytics Project
 
-Welcome to the **Data Warehouse and Analytics Project** repository! 
+An end-to-end data warehouse and analytics project built with **MySQL**, using the **Medallion Architecture** (Bronze, Silver, Gold layers). It consolidates sales data from two source systems (ERP and CRM), cleans it, models it as a star schema, and answers business questions with SQL.
 
-This project demonstrates a comprehensive, end-to-end data warehousing and analytics solution—from building a structured data warehouse to generating actionable business insights. Designed as a hands-on portfolio project, it highlights industry best practices in data engineering, data modeling, and business analytics.
+> **Credit:** I built this project while following [CHANGE THIS: course name] by [CHANGE THIS: creator name] ([CHANGE THIS: course link]). The project design comes from that course. I implemented and ran it on MySQL.
 
----
+## Architecture
 
-## Project Requirements
+| Layer | Purpose |
+|-------|---------|
+| **Bronze** | Raw data loaded as-is from the ERP and CRM CSV files |
+| **Silver** | Cleaned and standardized data: handled missing values, fixed data quality issues |
+| **Gold** | Business-ready star schema (`dim_` and `fact_` tables) and reporting views |
 
-### 1. Data Warehouse Architecture (Data Engineering)
+<!-- Optional: add an architecture diagram image here later -->
 
-#### Objectives
-Develop a modern Data Warehouse using **MySQL** implementing the **Medallion Architecture (Bronze, Silver, Gold layers)** to consolidate enterprise sales data, enable clean analytical reporting, and support data-driven decision-making.
+## Data Sources
 
-#### Key Specifications
-- **Data Sources:** Ingested and consolidated raw operational data from two distinct source systems (**ERP** and **CRM**) provided as CSV files.
-- **Data Quality & Transformation:** Cleanse, standardize, handle missing values, and resolve data quality issues in the Silver layer prior to downstream analysis.
-- **Data Integration & Modeling:** Combine cleaned datasets into a user-friendly Star Schema (Fact and Dimension tables) in the Gold layer optimized for analytical queries.
-- **Scope:** Focus on current snapshot analytics; historization (SCDs) is not required for this scope.
-- **Documentation:** Provide clear documentation of the data pipeline and data model to support both technical teams and business stakeholders.
+- **ERP** and **CRM** operational data, provided as CSV files in the `datasets/` folder
+- Scope: current snapshot analytics only (no historization or slowly changing dimensions)
 
----
+## What the Project Covers
 
-### 2. Business Intelligence & Analytics (Data Analytics)
+**Data engineering**
+- Ingesting raw CSV data into the Bronze layer
+- Cleaning, standardizing, and validating data in the Silver layer
+- Building a star schema in the Gold layer
 
-#### Objectives
-Develop advanced SQL queries, window functions, and views to deliver granular business insights into:
-- **Customer Behavior:** Tracking high-value customers, order frequency, and retention.
-- **Product Performance:** Identifying top-selling product categories, revenue drivers, and item movement.
-- **Sales Trends & Seasonality:** Analyzing monthly revenue growth, cumulative running totals, and moving average price trends over time.
+**Analytics**
+- Customer behavior: high-value customers, order frequency, retention
+- Product performance: top categories and revenue drivers
+- Sales trends: monthly revenue growth, running totals, moving averages
+- Techniques used: window functions, views, aggregations
 
-These analytical outputs empower stakeholders with key performance indicators (KPIs) to drive strategic business decisions.
+## Key Insights
 
----
+- [CHANGE THIS: one finding from your queries, e.g. which product category earns the most revenue]
+- [CHANGE THIS: a second finding]
+- [CHANGE THIS: a third finding]
+
 ## Repository Structure
 
-```text
-├── docs/                      # Documentation, schema diagrams, and data dictionary
+```
+sql-data-warehouse-project/
+├── datasets/                  # Raw ERP and CRM CSV source files
+├── doc/                       # Documentation, schema diagrams, data dictionary
 ├── scripts/
-│   ├── 01_bronze_layer.sql    # Raw data ingestion and table creation
-│   ├── 02_silver_layer.sql    # Data cleansing, standardization, and quality checks
-│   ├── 03_gold_layer.sql      # Star Schema dimension (dim_) and fact (fact_) tables
-│   ├── 04_gold_reports.sql    # Aggregated reporting views (report_customers, report_products)
-│   └── 05_eda_exploration.sql # Exploratory Data Analysis & business metrics queries
-└── README.md                  # Project documentation
+│   ├── 01_bronze_layer.sql    # Table creation and raw data ingestion
+│   ├── 02_silver_layer.sql    # Cleansing, standardization, quality checks
+│   ├── 03_gold_layer.sql      # Star schema: dimension and fact tables
+│   ├── 04_gold_reports.sql    # Reporting views (customers, products)
+│   └── 05_eda_exploration.sql # Exploratory analysis and business metrics
+├── tests/                     # [CHANGE THIS: what these files check]
+├── LICENSE
+└── README.md
 ```
 
+## How to Run
+
+1. Install **MySQL** (8.0 or later) and a client such as MySQL Workbench.
+2. Clone the repository:
+```bash
+   git clone https://github.com/Afrojkhan-glitch/sql-data-warehouse-project.git
+```
+3. Open the scripts in the `scripts/` folder in your MySQL client and run them **in numerical order**, from `01` to `05`.
+4. In the Bronze script, update the file paths so they point to the CSV files in the `datasets/` folder on your computer.
+
+## Tech Stack
+
+- MySQL
+- SQL (window functions, views, joins, aggregations)
+- Git and GitHub
+
 ## License
-This project is licensed under the [MIT LICENSED](LICENSE). You are free to use, modify, and share this project with proper with proper attribution.
+
+This project is licensed under the [MIT License](LICENSE). You are free to use, modify, and share it with proper attribution.
 
 ## About Me
-Hi there! My name is **Afroj Ahmad Khan**. I am an aspiring Data Analyst passionate about building scalable data pipelines, writing performant SQL queries, and translating complex data into strategic business insights.
+
+Hi, I'm **Afroj Ahmad Khan**, an aspiring Data Analyst who enjoys building data pipelines, writing performant SQL, and turning data into business insights.
