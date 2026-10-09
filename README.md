@@ -43,7 +43,7 @@ An end-to-end data warehouse and analytics project built with **MySQL**, using t
 ```
 sql-data-warehouse-project/
 ├── datasets/                  # Raw ERP and CRM CSV source files
-├── doc/                       # Documentation, schema diagrams, data dictionary
+├── docs/                       # Documentation, schema diagrams, data dictionary
 ├── scripts/
 │   ├── 01_bronze_layer.sql    # Table creation and raw data ingestion
 │   ├── 02_silver_layer.sql    # Cleansing, standardization, quality checks
